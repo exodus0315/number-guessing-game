@@ -1,16 +1,72 @@
-/*
-숫자 맞추기 게임(Number guessing game) 기본 룰 및 로직 설정
+let randomNumber = 0;
+let userAnswer = document.getElementById("user-answer");
+let playButton = document.getElementById("play-button");
+let resetButton = document.getElementById("reset-button");
+let chanceArea = document.getElementById("chance-area");
+let resultArea = document.getElementById("result-area");
+let chance = 5;
+let history = [];
 
-랜덤 번호를 지정해준다.
-유저가 번호 입력
-정답 == 유저번호 : "정답입니다!" 문구 출력
-정답 < 유저번호 : "Down!" 문구 출력
-정답 > 유저번호 : "Up!" 문구 출력
-기회 5번 다 쓰면 게임 종료
-정답을 맞춰도 게임 종료
-게임 종료 후 리셋 버튼을 누르면 게임 다시 시작
+playButton.addEventListener("click", playGame);
+resetButton.addEventListener("click", resetGame);
+userAnswer.addEventListener("click", function () {
+  userAnswer.value = "";
+});
 
-추가:
-중복 단어 입력시 기회 -1 하지 않기
-텍스트박스 선택시 숫자 자동으로 지워지게 하기
-*/
+function randomValue() {
+  randomNumber = Math.floor(Math.random() * 100) + 1;
+  console.log(`정답은 ${randomNumber} 입니다.`);
+}
+
+function playGame() {
+  let userNumber = userAnswer.value;
+
+  if (0 > userNumber || userNumber > 100) {
+    resultArea.textContent = "1 부터 100 사이의 숫자를 입력해주세요.";
+    return;
+  }
+  if (history.includes(userNumber) == true) {
+    resultArea.textContent =
+      "중복된 값을 입력하셨습니다. 다른 값을 입력해주세요.";
+    return;
+  }
+
+  if (userNumber == "") {
+    resultArea.textContent = "정답을 입력해주세요.";
+    return;
+  }
+
+  chance--;
+  chanceArea.textContent = `남은 기회 : ${chance}회`;
+
+  if (randomNumber > userNumber) {
+    resultArea.textContent = "더 높은 숫자를 입력해주세요.";
+  } else if (randomNumber < userNumber) {
+    resultArea.textContent = "더 낮은 숫자를 입력해주세요.";
+  } else {
+    playButton.disabled = true;
+    resultArea.textContent = "정답입니다. 초기화 후 다시 시작할 수 있습니다.";
+    return;
+  }
+
+  if (chance == 0) {
+    playButton.disabled = true;
+    resultArea.textContent = `아쉽습니다. 정답은 ${randomNumber}입니다. 초기화 후 다시 시작해주세요.`;
+  }
+
+  history.push(userNumber);
+  console.log(history);
+}
+
+function resetGame() {
+  randomValue();
+  userAnswer.value = "";
+  chance = 5;
+  resultArea.textContent =
+    "게임이 리셋되었습니다. 게임 결과가 여기 표시됩니다.";
+  chanceArea.textContent = "남은 기회 : 5회";
+  playButton.disabled = false;
+  history = [];
+}
+
+randomValue();
