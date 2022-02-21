@@ -55,7 +55,6 @@ function playGame() {
   }
 
   history.push(userNumber);
-  console.log(history);
 }
 
 function resetGame() {
