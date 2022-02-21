@@ -21,7 +21,7 @@ function randomValue() {
 function playGame() {
   let userNumber = userAnswer.value;
 
-  if (0 > userNumber || userNumber > 100) {
+  if (1 > userNumber || userNumber > 100) {
     resultArea.textContent = "1 부터 100 사이의 숫자를 입력해주세요.";
     return;
   }
